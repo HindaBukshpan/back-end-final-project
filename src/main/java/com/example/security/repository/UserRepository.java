@@ -2,6 +2,7 @@ package com.example.security.repository;
 
 import com.example.security.model.CustomUser;
 import com.example.security.repository.mapper.UserMapper;
+import com.example.security.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -12,6 +13,12 @@ import java.util.List;
 public class UserRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private ItemRepository itemRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     private static final String USERS_TABLE = "users";
 
@@ -49,6 +56,7 @@ public class UserRepository {
         return users;
     }
 
+
     public CustomUser updateUser(CustomUser user) {
         String sql = String.format("UPDATE %s SET first_name = ?, last_name = ?, email = ?, phone = ?, address = ? WHERE username = ?", USERS_TABLE);
         jdbcTemplate.update(sql, user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getAddress(), user.getUsername());
@@ -56,8 +64,11 @@ public class UserRepository {
     }
 
     public String deleteUser(String username) {
+        String result = orderService.deleteUserDetailsWhenDeleteTheUser(username);
         String sql = String.format("DELETE FROM %s WHERE username = ?", USERS_TABLE);
         jdbcTemplate.update(sql, username);
-        return "User deleted successfully";
+        return "User deleted successfully, and "
+                + result
+                ;
     }
 }

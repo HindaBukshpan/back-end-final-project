@@ -2,6 +2,7 @@ package com.example.security.controller;
 
 import com.example.security.model.CustomUser;
 import com.example.security.service.UserService;
+import com.example.security.service.WishListService;
 import com.example.security.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private WishListService wishListService;
 
     @PostMapping(value = "/register")
     public ResponseEntity<String> register(@RequestBody CustomUser user) {
@@ -81,6 +85,7 @@ public class UserController {
             String username = jwtUtil.extractUsername(jwtToken);
             String result = userService.deleteUser(username);
             if (result.contains("successfully")) {
+                wishListService.deleteAllItemsFromWishListByUserName(username);
                 return new ResponseEntity(result, HttpStatus.OK);
             }
             return new ResponseEntity(result, HttpStatus.BAD_REQUEST);
@@ -88,6 +93,22 @@ public class UserController {
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping(value = "/wish-list")
+    public ResponseEntity<String> addItemToWishList(@RequestHeader(value = "Authorization") String token, @RequestBody Integer itemId) {
+        try {
+            String jwtToken = token.substring(7);
+            String username = jwtUtil.extractUsername(jwtToken);
+            if (username == null) {
+                return new ResponseEntity("you must enter the system to add items to your wish list.", HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity(wishListService.addItemToWishList(username, itemId), HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
 
 

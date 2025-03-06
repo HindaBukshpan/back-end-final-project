@@ -3,16 +3,12 @@ package com.example.security.service;
 import com.example.security.model.CustomUser;
 import com.example.security.model.Role;
 import com.example.security.repository.UserRepository;
+import com.example.security.repository.WishListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -22,6 +18,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    WishListRepository wishListRepository;
 
     public String register(CustomUser user) {
         if (user.getFirstName() == null || user.getLastName() == null || user.getEmail() == null
@@ -65,6 +64,7 @@ public class UserService {
         if (registeredUser == null) {
             return "The user with this username does not exist, so it cannot be deleted";
         }
+
         return userRepository.deleteUser(registeredUser.getUsername());
     }
 

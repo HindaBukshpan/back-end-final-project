@@ -51,6 +51,8 @@ public class AdminController {
     @PostMapping("/create-item")
     public ResponseEntity<String> createItem(@RequestHeader(value = "Authorization") String token, @RequestBody Item item) {
         try {
+            System.out.println(token);
+            System.out.println(item);
             String jwtToken = token.substring(7);
             String username = jwtUtil.extractUsername(jwtToken);
             CustomUser user = userService.getUserByUsername(username);
@@ -75,28 +77,37 @@ public class AdminController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update-item")
-    public ResponseEntity<Item> updateItem(@RequestHeader(value = "Authorization") String token, @RequestBody Item updatedItem) {
+    public ResponseEntity<String> updateItem(@RequestHeader(value = "Authorization") String token, @RequestBody Item updatedItem) {
         try {
             String jwtToken = token.substring(7);
             String username = jwtUtil.extractUsername(jwtToken);
+
+            if (username == null) {
+                return new ResponseEntity<>("You must enter the system to update items.", HttpStatus.BAD_REQUEST);
+            }
+
             CustomUser user = userService.getUserByUsername(username);
-            if (username == null){
-                return new ResponseEntity("you must enter the system to update items.", HttpStatus.BAD_REQUEST);
+            if (user == null || user.getRole() != Role.ADMIN) {
+                return new ResponseEntity<>("You are not allowed to update items in the system.", HttpStatus.BAD_REQUEST);
             }
-            if (user.getRole() != Role.ADMIN) {
-                return new ResponseEntity("you are not allowed to update items in the system.", HttpStatus.BAD_REQUEST);
+
+            if (itemService.getItemById(updatedItem.getId()) == null) {
+                return new ResponseEntity<>("Did not update item. This item does not exist in the system.", HttpStatus.BAD_REQUEST);
             }
-            if (itemService.getItemById(updatedItem.getId()) == null){
-                return new ResponseEntity("did not update item. This item does not exist in the system.", HttpStatus.BAD_REQUEST);
+
+            if (updatedItem.getId() == null || updatedItem.getName() == null || updatedItem.getDescription().trim().isEmpty() ||
+                    updatedItem.getPrice() == null || updatedItem.getStock() == null || updatedItem.getImageUrl() == null) {
+                return new ResponseEntity<>("Item not updated. ID, name, description, price, stock & image URL are required.", HttpStatus.BAD_REQUEST);
             }
-            if (updatedItem.getId() == null || updatedItem.getName() == null || updatedItem.getDescription().trim().isEmpty() || updatedItem.getPrice() == null || updatedItem.getStock() == null || updatedItem.getImageUrl() == null) {
-                return new ResponseEntity("Item not update. id, name, description, price, stock & url image are required.", HttpStatus.BAD_REQUEST);
-            }
-            return new ResponseEntity(itemService.updateItem(updatedItem), HttpStatus.OK);
+
+            itemService.updateItem(updatedItem);
+
+            return new ResponseEntity<>("Item updated successfully.", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{itemId}")
@@ -117,6 +128,7 @@ public class AdminController {
             }
             return new ResponseEntity<>(itemService.deleteItem(itemId), HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println("hhhhh yey");
             return new ResponseEntity(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

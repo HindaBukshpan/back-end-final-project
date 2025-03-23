@@ -55,14 +55,16 @@ FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
 INSERT INTO users (first_name, last_name, email, phone, address, username, password, role) VALUES
 ('Miki', 'Gabay', E'mikigabay@gmail.com', '0585236376', '45 Ben Eliezer St', 'mikigabay', '$2a$10$24P9JHWZJm8yRsJRpP4a.e11OvU9ynMvz6XAKJOrxl8Nhph7mojJ2', 'USER'),
 ('Amitay', 'Gabay', E'amitaygabay1@gmail.com', '0504380333', '38 Erez St', 'amitaygabay', '$2a$10$K78Qy75RrDNQcAolPojuM.sI.otXpP23xhZYJ7p2fXrIMoI.k2ehO', 'ADMIN'),
-('Hinda', 'Bukshpan', E'hynda4@gmail.com', '0533178921', 'harav sah 64', 'hinda', '$2a$10$TjUr0ZD6jDQHMleX7PSBZu82Rv35y.XHV6peFR0JSN8TPi/yHuuXm', 'USER');
+('Hinda', 'Bukshpan', E'hynda4@gmail.com', '0533178921', 'harav sah 64', 'hinda', '$2a$10$TjUr0ZD6jDQHMleX7PSBZu82Rv35y.XHV6peFR0JSN8TPi/yHuuXm', 'USER'),
+('www', 'www', E'www@gmail.com', '0533178921', 'www', 'wwww', '$2a$10$NtvqXNBOZ1Tsr8NxjQ8eWe8NfxiuRKFKnAji.GHa5XnRTJH6kpTwy', 'ADMIN');
+
 
 
 INSERT INTO items (name, description, price, stock, image_url) VALUES
 ('Nursing Chair', 'Comfortable chair designed for nursing mothers, offering back and arm support.', 200, 10, 'https://d3m9l0v76dty0.cloudfront.net/system/photos/14252322/large/3fe935d54645274c4691f422ff5a535b.jpg'),
-('Sofa', 'A sturdy wooden table for dining, suitable for 6-8 people.', 350, 8, 'https://vdivani.co.il/wp-content/uploads/2023/12/WhatsApp-Image-2023-12-07-at-10.46.07.jpeg'),
-('Dining Table', 'tall', 250, 19, 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxIQEA8PEBEPEA8NDw8NEA8PEBAQDw0QFREWFhYSFRUYHSggGBolGxUVITEhZ'),
-('Living Room Table', 'A stylish table for living rooms, perfect for coffee and snacks.', 250, 12, 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxIQEA8PEBEPEA8NDw8NEA8PEBAQDw0QFREWFh8QGS0fAABEAAAAP/Z'),
+('Living Room Table', 'A sturdy wooden table for dining, suitable for 6-8 people.', 350, 8, 'https://vdivani.co.il/wp-content/uploads/2023/12/WhatsApp-Image-2023-12-07-at-10.46.07.jpeg'),
+('Dining Table', 'from glass, butyfull, perfect for coffee and snacks.', 250, 19, 'https://nalla.co.il/wp-content/uploads/2024/02/%D7%A9%D7%95%D7%9C%D7%97%D7%9F-%D7%A1%D7%9C%D7%95%D7%9F-%D7%93%D7%92%D7%9D-%D7%B4Lotus%D7%B4-5.jpg'),
+('Sofa', 'Comfortable, A stylish sofa for the guest.', 250, 12, 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm8WDrswY2GitOOmjTNFzysgfmf6lM9T-wqQ&s'),
 ('Patio Table Glass', 'Durable glass table for outdoor patios.', 180, 20, 'https://ae-pic-a1.aliexpress-media.com/kf/S88f00c2c20bc47c1965c7d06dfa2c4f9E.jpg_960x960q75.jpg_.avif'),
 ('Living Room Chairs', 'Comfortable chairs designed for the living room.', 120, 30, 'https://img.freepik.com/free-photo/closeup-shot-dark-brown-leather-armchair_181624-22622.jpg?t=st=1741235764~exp=1741239364~hmac=61270c7873e1d36c9033e9fe14aaf8f3229c2494592a31a175599cb3cd320820&w=740'),
 ('Kitchen Chairs', 'Set of sturdy chairs designed for the kitchen or dining area.', 90, 25, 'https://img.freepik.com/free-vector/chair_1308-82630.jpg?t=st=1741235714~exp=1741239314~hmac=d7139e0fde3c435f74417f53ff7d7c5c2a6090dbdbffb1332f597a2dcfcd072b&w=740'),
